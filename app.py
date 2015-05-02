@@ -6,6 +6,7 @@ from bottle import SimpleTemplate
 from configparser import ConfigParser
 from ldap3 import Connection, LDAPBindError, LDAPInvalidCredentialsResult, Server
 from ldap3 import AUTH_SIMPLE, SUBTREE
+import os
 from os import path
 
 
@@ -65,10 +66,15 @@ def find_user_dn(server, uid):
         return c.response[0]['dn'] if c.response else None
 
 
-BASE_DIR = path.dirname(__file__)
+def read_config():
+    config = ConfigParser()
+    config.read([path.join(BASE_DIR, 'settings.ini'), os.getenv('CONF_FILE', '')])
 
-CONF = ConfigParser()
-CONF.read(path.join(BASE_DIR, 'settings.ini'))
+    return config
+
+
+BASE_DIR = path.dirname(__file__)
+CONF = read_config()
 
 bottle.TEMPLATE_PATH = [ BASE_DIR ]
 
