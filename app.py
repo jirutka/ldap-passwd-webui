@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import bottle
 from bottle import get, post, static_file, request, route, template
 from bottle import SimpleTemplate
@@ -75,9 +77,9 @@ SimpleTemplate.defaults = dict(CONF['html'])
 SimpleTemplate.defaults['url'] = bottle.url
 
 
-# Run bottle internal test server when invoked directly (in development).
+# Run bottle internal server when invoked directly (mainly for development).
 if __name__ == '__main__':
-    bottle.run(host='0.0.0.0', port=8080)
+    bottle.run(**CONF['server'])
 # Run bottle in application mode (in production under uWSGI server).
 else:
     application = bottle.default_app()
