@@ -26,7 +26,10 @@ def post_index():
         return error("Password must be at least 8 characters long!")
 
     if not change_password(form('username'), form('old-password'), form('new-password')):
+        print("Unsuccessful attemp to change password for: %s" % form('username'))
         return error("Username or password is incorrect!")
+
+    print("Password successfully changed for: %s" % form('username'))
 
     return index_tpl(alerts=[('success', "Password has been changed")])
 
@@ -41,8 +44,6 @@ def index_tpl(**kwargs):
 
 
 def change_password(username, old_pass, new_pass):
-    print("Changing password for user: %s" % username)
-
     server = Server(CONF['ldap']['host'], int(CONF['ldap']['port']))
     user_dn = find_user_dn(server, username)
 
