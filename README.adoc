@@ -11,7 +11,7 @@ ifdef::env-github[:idprefix: user-content-]
 :pypi: https://pypi.python.org/pypi
 
 The aim of this project is to provide a very simple web form for users to be able to change their password stored in LDAP.
-It’s built with https://pypi.python.org/pypi/bottle/[Bottle], a WSGI micro web-framework for Python.
+It’s built with http://bottlepy.org[Bottle], a WSGI micro web-framework for Python.
 
 
 == Installation
@@ -28,8 +28,8 @@ pip install -r requirements.txt
 === Requirements
 
 * Python 3.x
-* https://pypi.python.org/pypi/bottle/[bottle] >= 0.12.8
-* https://pypi.python.org/pypi/ldap3[ldap3] >= 0.9
+* https://pypi.python.org/pypi/bottle/[bottle]
+* https://pypi.python.org/pypi/ldap3[ldap3]
 
 
 == Configuration
