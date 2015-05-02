@@ -1,0 +1,115 @@
+= Password change
+Jakub Jirutka <https://github.com/jirutka[@jirutka]>
+:page-layout: base
+:idprefix:
+ifdef::env-github[:idprefix: user-content-]
+:idseparator: -
+:source-language: python
+:language: {source-language}
+//custom
+:wikip: https://en.wikipedia.org/wiki
+:pypi: https://pypi.python.org/pypi
+
+The aim of this project is to provide a very simple web form for users to be able to change their password stored in LDAP.
+It’s built with https://pypi.python.org/pypi/bottle/[Bottle], a WSGI micro web-framework for Python.
+
+
+== Installation
+
+Clone this repository and install dependencies:
+
+[source, sh]
+----
+git clone git@github.com:jirutka/change-password.git
+cd change-password
+pip install -r requirements.txt
+----
+
+=== Requirements
+
+* Python 3.x
+* https://pypi.python.org/pypi/bottle/[bottle] >= 0.12.8
+* https://pypi.python.org/pypi/ldap3[ldap3] >= 0.9
+
+
+== Configuration
+
+Configuration is read from the file link:settings.ini[].
+You may change location of the settings file using the environment variable `CONF_FILE`.
+
+
+== Run it
+
+There are multiple ways how to run it:
+
+* with the built-in default WSGI server based on https://docs.python.org/3/library/wsgiref.html#module-wsgiref.simple_server[wsgiref],
+* under a {wikip}/Web_Server_Gateway_Interface[WSGI] server like https://uwsgi-docs.readthedocs.org[uWSGI], http://gunicorn.org[Gunicorn], {pypi}/mod_wsgi[mod_wsgi], … (recommended)
+* as a {wikip}/Common_Gateway_Interface[CGI] script.
+
+=== Run with the built-in server
+
+Simply execute the `app.py`:
+
+[source]
+python3 app.py
+
+Then you can access the app on http://localhost:8080.
+The port and host may be changed in link:settings.ini[].
+
+=== Run with uWSGI and nginx
+
+If you have many micro-apps like this, it’s IMO kinda overkill to run each in a separate uWSGI process, isn’t it?
+It’s not so well known, but uWSGI allows to “mount” multiple application in a single uWSGI process and with a single socket.
+
+[source, ini]
+.Sample uWSGI configuration:
+----
+[uwsgi]
+plugins = python34
+socket = /run/uwsgi/main.sock
+chdir = /var/www/scripts
+logger = file:/var/log/uwsgi/main.log
+processes = 1
+threads = 2
+# map URI paths to applications
+mount = /admin/change-password=change-password/app.py
+#mount = /admin/change-world=change-world/app.py
+manage-script-name = true
+----
+
+[source, nginx]
+.Sample nginx configuration as a reverse proxy in front of uWSGI:
+----
+server {
+    listen 443 ssl;
+    server_name example.org;
+
+    ssl_certificate     /etc/ssl/nginx/nginx.crt;
+    ssl_certificate_key /etc/ssl/nginx/nginx.key;
+
+    # uWSGI scripts
+    location /admin/ {
+        uwsgi_pass  unix:/run/uwsgi/main.sock;
+        include     uwsgi_params;
+    }
+}
+----
+
+== Screenshot
+
+image::doc/screenshot.png[]
+
+
+== Contributing
+
+. Fork it.
+. Create your feature branch (`git checkout -b my-new-feature`).
+. Commit your changes (`git commit -am 'Add some feature'`).
+. Push to the branch (`git push origin my-new-feature`).
+. Create a new Pull Request.
+
+
+== License
+
+This project is licensed under http://opensource.org/licenses/MIT/[MIT License].
+For the full text of the license, see the link:LICENSE[LICENSE] file.
