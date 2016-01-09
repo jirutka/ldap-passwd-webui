@@ -62,7 +62,8 @@ def change_password(username, old_pass, new_pass):
 
 def find_user_dn(server, uid):
     with Connection(server) as c:
-        c.search(CONF['ldap']['base'], "(uid=%s)" % uid, SUBTREE, attributes=['dn'])
+        search_filter = CONF['ldap']['search_filter'].replace('{uid}', uid)
+        c.search(CONF['ldap']['base'], "(%s)" % search_filter, SUBTREE, attributes=['dn'])
         return c.response[0]['dn'] if c.response else None
 
 
