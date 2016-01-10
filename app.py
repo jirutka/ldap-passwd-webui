@@ -6,7 +6,7 @@ from bottle import SimpleTemplate
 from configparser import ConfigParser
 from ldap3 import Connection, LDAPBindError, LDAPInvalidCredentialsResult, Server
 from ldap3 import AUTH_SIMPLE, SUBTREE
-from ldap3.core.exceptions import LDAPConstraintViolationResult
+from ldap3.core.exceptions import LDAPConstraintViolationResult, LDAPUserNameIsMandatoryError
 import os
 from os import path
 
@@ -62,7 +62,7 @@ def change_password(*args):
         else:
             change_password_ldap(*args)
 
-    except (LDAPBindError, LDAPInvalidCredentialsResult):
+    except (LDAPBindError, LDAPInvalidCredentialsResult, LDAPUserNameIsMandatoryError):
         raise Error('Username or password is incorrect!')
 
     except LDAPConstraintViolationResult as e:
@@ -75,6 +75,7 @@ def change_password_ldap(username, old_pass, new_pass):
     with connect_ldap() as c:
         user_dn = find_user_dn(c, username)
 
+    # Note: raises LDAPUserNameIsMandatoryError when user_dn is None.
     with connect_ldap(authentication=AUTH_SIMPLE, user=user_dn, password=old_pass) as c:
         c.bind()
         c.extend.standard.modify_password(user_dn, old_pass, new_pass)
