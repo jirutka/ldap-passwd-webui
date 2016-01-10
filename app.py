@@ -50,7 +50,7 @@ def index_tpl(**kwargs):
 
 
 def connect_ldap(**kwargs):
-    server = Server(CONF['ldap']['host'], int(CONF['ldap']['port']))
+    server = Server(CONF['ldap']['host'], int(CONF['ldap']['port']), connect_timeout=5)
 
     return Connection(server, raise_exceptions=True, **kwargs)
 
