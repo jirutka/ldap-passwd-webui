@@ -10,7 +10,7 @@ ifdef::env-github[:idprefix: user-content-]
 :wikip: https://en.wikipedia.org/wiki
 :pypi: https://pypi.python.org/pypi
 
-The aim of this project is to provide a very simple web form for users to be able to change their password stored in LDAP.
+The aim of this project is to provide a very simple web form for users to be able to change their password stored in LDAP or Active Directory (Samba 4 AD).
 It’s built with http://bottlepy.org[Bottle], a WSGI micro web-framework for Python.
 
 

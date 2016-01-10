@@ -6,6 +6,7 @@ from bottle import SimpleTemplate
 from configparser import ConfigParser
 from ldap3 import Connection, LDAPBindError, LDAPInvalidCredentialsResult, Server
 from ldap3 import AUTH_SIMPLE, SUBTREE
+from ldap3.core.exceptions import LDAPConstraintViolationResult
 import os
 from os import path
 
@@ -28,9 +29,11 @@ def post_index():
     if len(form('new-password')) < 8:
         return error("Password must be at least 8 characters long!")
 
-    if not change_password(form('username'), form('old-password'), form('new-password')):
-        print("Unsuccessful attemp to change password for: %s" % form('username'))
-        return error("Username or password is incorrect!")
+    try:
+        change_password(form('username'), form('old-password'), form('new-password'))
+    except Error as e:
+        print("Unsuccessful attemp to change password for %s: %s" % (form('username'), e))
+        return error(str(e))
 
     print("Password successfully changed for: %s" % form('username'))
 
@@ -46,25 +49,51 @@ def index_tpl(**kwargs):
     return template('index', **kwargs)
 
 
-def change_password(username, old_pass, new_pass):
+def connect_ldap(**kwargs):
     server = Server(CONF['ldap']['host'], int(CONF['ldap']['port']))
-    user_dn = find_user_dn(server, username)
 
+    return Connection(server, raise_exceptions=True, **kwargs)
+
+
+def change_password(*args):
     try:
-        with Connection(server, authentication=AUTH_SIMPLE, raise_exceptions=True,
-                        user=user_dn, password=old_pass) as c:
-            c.bind()
-            c.extend.standard.modify_password(user_dn, old_pass, new_pass)
-        return True
+        if CONF['ldap'].get('type') == 'ad':
+            change_password_ad(*args)
+        else:
+            change_password_ldap(*args)
+
     except (LDAPBindError, LDAPInvalidCredentialsResult):
-        return False
+        raise Error('Username or password is incorrect!')
+
+    except LDAPConstraintViolationResult as e:
+        # Extract useful part of the error message (for Samba 4 / AD).
+        msg = e.message.split('check_password_restrictions: ')[-1].capitalize()
+        raise Error(msg)
 
 
-def find_user_dn(server, uid):
-    with Connection(server) as c:
-        search_filter = CONF['ldap']['search_filter'].replace('{uid}', uid)
-        c.search(CONF['ldap']['base'], "(%s)" % search_filter, SUBTREE, attributes=['dn'])
-        return c.response[0]['dn'] if c.response else None
+def change_password_ldap(username, old_pass, new_pass):
+    with connect_ldap() as c:
+        user_dn = find_user_dn(c, username)
+
+    with connect_ldap(authentication=AUTH_SIMPLE, user=user_dn, password=old_pass) as c:
+        c.bind()
+        c.extend.standard.modify_password(user_dn, old_pass, new_pass)
+
+
+def change_password_ad(username, old_pass, new_pass):
+    user = username + '@' + CONF['ldap']['ad_domain']
+
+    with connect_ldap(authentication=AUTH_SIMPLE, user=user, password=old_pass) as c:
+        c.bind()
+        user_dn = find_user_dn(c, username)
+        c.extend.microsoft.modify_password(user_dn, new_pass, old_pass)
+
+
+def find_user_dn(conn, uid):
+    search_filter = CONF['ldap']['search_filter'].replace('{uid}', uid)
+    conn.search(CONF['ldap']['base'], "(%s)" % search_filter, SUBTREE, attributes=['dn'])
+
+    return conn.response[0]['dn'] if conn.response else None
 
 
 def read_config():
@@ -72,6 +101,10 @@ def read_config():
     config.read([path.join(BASE_DIR, 'settings.ini'), os.getenv('CONF_FILE', '')])
 
     return config
+
+
+class Error(Exception):
+    pass
 
 
 BASE_DIR = path.dirname(__file__)
