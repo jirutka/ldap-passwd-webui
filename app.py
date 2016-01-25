@@ -18,7 +18,7 @@ def get_index():
 
 @post('/')
 def post_index():
-    form = request.forms.get
+    form = request.forms.getunicode
 
     def error(msg):
         return index_tpl(username=form('username'), alerts=[('error', msg)])
