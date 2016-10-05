@@ -37,6 +37,8 @@ pip install -r requirements.txt
 Configuration is read from the file link:settings.ini[].
 You may change location of the settings file using the environment variable `CONF_FILE`.
 
+If you have Active Directory (or Samba 4 AD), then you *must* use encrypted connection (i.e. LDAPS or StartSSL) – AD doesn’t allow changing password via unencrypted connection.
+
 
 == Run it
 
