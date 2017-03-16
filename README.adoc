@@ -34,7 +34,7 @@ pip install -r requirements.txt
 
 == Configuration
 
-Configuration is read from the file link:settings.ini[].
+Configuration is read from the file link:settings.ini.example[settings.ini].
 You may change location of the settings file using the environment variable `CONF_FILE`.
 
 If you have Active Directory (or Samba 4 AD), then you *must* use encrypted connection (i.e. LDAPS or StartSSL) – AD doesn’t allow changing password via unencrypted connection.
@@ -56,7 +56,7 @@ Simply execute the `app.py`:
 python3 app.py
 
 Then you can access the app on http://localhost:8080.
-The port and host may be changed in link:settings.ini[].
+The port and host may be changed in link:settings.ini.example[settings.ini].
 
 === Run with uWSGI and nginx
 
