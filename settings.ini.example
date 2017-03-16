@@ -8,6 +8,11 @@ use_ssl = true
 base = ou=People,dc=example,dc=org
 search_filter = uid={uid}
 
+# Uncomment for AD / Samba 4
+#type = ad
+#ad_domain = ad.example.org
+#search_filter = sAMAccountName={uid}
+
 [server]
 server = auto
 host = localhost
