@@ -3,7 +3,8 @@ page_title = Change your password on example.org
 
 [ldap]
 host = localhost
-port = 389
+port = 636
+use_ssl = true
 base = ou=People,dc=example,dc=org
 search_filter = uid={uid}
 

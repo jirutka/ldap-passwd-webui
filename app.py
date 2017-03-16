@@ -50,7 +50,10 @@ def index_tpl(**kwargs):
 
 
 def connect_ldap(**kwargs):
-    server = Server(CONF['ldap']['host'], int(CONF['ldap']['port']), connect_timeout=5)
+    server = Server(CONF['ldap']['host'],
+                    port=CONF['ldap'].getint('port', None),
+                    use_ssl=CONF['ldap'].getboolean('use_ssl', False),
+                    connect_timeout=5)
 
     return Connection(server, raise_exceptions=True, **kwargs)
 
