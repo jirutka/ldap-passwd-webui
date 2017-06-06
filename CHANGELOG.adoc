@@ -1,0 +1,10 @@
+= Changelog
+:repo-uri: https://github.com/jirutka/change-password
+:issues: {repo-uri}/issues
+:pulls: {repo-uri}/pull
+:tags: {repo-uri}/releases/tag
+
+
+== 1.0.0 (unreleased)
+
+* First stable release.
