@@ -1,14 +1,10 @@
 = Password change
 Jakub Jirutka <https://github.com/jirutka[@jirutka]>
-:page-layout: base
-:idprefix:
-ifdef::env-github[:idprefix: user-content-]
-:idseparator: -
-:source-language: python
-:language: {source-language}
 //custom
-:wikip: https://en.wikipedia.org/wiki
-:pypi: https://pypi.python.org/pypi
+:proj-name: change-password
+:gh-name: jirutka/{proj-name}
+:wikip-url: https://en.wikipedia.org/wiki
+:pypi-url: https://pypi.python.org/pypi
 
 The aim of this project is to provide a very simple web form for users to be able to change their password stored in LDAP or Active Directory (Samba 4 AD).
 It’s built with http://bottlepy.org[Bottle], a WSGI micro web-framework for Python.
@@ -18,18 +14,18 @@ It’s built with http://bottlepy.org[Bottle], a WSGI micro web-framework for Py
 
 Clone this repository and install dependencies:
 
-[source, sh]
+[source, sh, subs="+attributes"]
 ----
-git clone git@github.com:jirutka/change-password.git
-cd change-password
+git clone git@github.com:{gh-name}.git
+cd {proj-name}
 pip install -r requirements.txt
 ----
 
 === Requirements
 
 * Python 3.x
-* https://pypi.python.org/pypi/bottle/[bottle]
-* https://pypi.python.org/pypi/ldap3[ldap3]
+* {pypi-url}/bottle/[bottle]
+* {pypi-url}/ldap3[ldap3]
 
 
 == Configuration
@@ -45,14 +41,14 @@ If you have Active Directory (or Samba 4 AD), then you *must* use encrypted conn
 There are multiple ways how to run it:
 
 * with the built-in default WSGI server based on https://docs.python.org/3/library/wsgiref.html#module-wsgiref.simple_server[wsgiref],
-* under a {wikip}/Web_Server_Gateway_Interface[WSGI] server like https://uwsgi-docs.readthedocs.org[uWSGI], http://gunicorn.org[Gunicorn], {pypi}/mod_wsgi[mod_wsgi], … (recommended)
-* as a {wikip}/Common_Gateway_Interface[CGI] script.
+* under a {wikip-url}/Web_Server_Gateway_Interface[WSGI] server like https://uwsgi-docs.readthedocs.org[uWSGI], http://gunicorn.org[Gunicorn], {pypi-url}/mod_wsgi[mod_wsgi], … (recommended)
+* as a {wikip-url}/Common_Gateway_Interface[CGI] script.
 
 === Run with the built-in server
 
 Simply execute the `app.py`:
 
-[source]
+[source, python]
 python3 app.py
 
 Then you can access the app on http://localhost:8080.
@@ -63,18 +59,18 @@ The port and host may be changed in link:settings.ini.example[settings.ini].
 If you have many micro-apps like this, it’s IMO kinda overkill to run each in a separate uWSGI process, isn’t it?
 It’s not so well known, but uWSGI allows to “mount” multiple application in a single uWSGI process and with a single socket.
 
-[source, ini]
+[source, ini, subs="+attributes"]
 .Sample uWSGI configuration:
 ----
 [uwsgi]
-plugins = python34
+plugins = python3
 socket = /run/uwsgi/main.sock
 chdir = /var/www/scripts
 logger = file:/var/log/uwsgi/main.log
 processes = 1
 threads = 2
 # map URI paths to applications
-mount = /admin/change-password=change-password/app.py
+mount = /admin/{proj-name}={proj-name}/app.py
 #mount = /admin/change-world=change-world/app.py
 manage-script-name = true
 ----
@@ -100,15 +96,6 @@ server {
 == Screenshot
 
 image::doc/screenshot.png[]
-
-
-== Contributing
-
-. Fork it.
-. Create your feature branch (`git checkout -b my-new-feature`).
-. Commit your changes (`git commit -am 'Add some feature'`).
-. Push to the branch (`git push origin my-new-feature`).
-. Create a new Pull Request.
 
 
 == License
