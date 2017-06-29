@@ -5,6 +5,11 @@
 :tags: {repo-uri}/releases/tag
 
 
+== Unreleased
+
+* Update for ldap3 2.x.
+
+
 == link:{tags}/v1.0.0[1.0.0] (2017-06-06)
 
 * First stable release.

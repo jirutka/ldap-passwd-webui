@@ -25,7 +25,7 @@ pip install -r requirements.txt
 
 * Python 3.x
 * {pypi-url}/bottle/[bottle]
-* {pypi-url}/ldap3[ldap3]
+* {pypi-url}/ldap3[ldap3] 2.x
 
 
 == Configuration

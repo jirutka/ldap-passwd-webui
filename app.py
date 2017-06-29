@@ -4,9 +4,10 @@ import bottle
 from bottle import get, post, static_file, request, route, template
 from bottle import SimpleTemplate
 from configparser import ConfigParser
-from ldap3 import Connection, LDAPBindError, LDAPInvalidCredentialsResult, Server
-from ldap3 import AUTH_SIMPLE, SUBTREE
-from ldap3.core.exceptions import LDAPConstraintViolationResult, LDAPUserNameIsMandatoryError
+from ldap3 import Connection, Server
+from ldap3 import SIMPLE, SUBTREE
+from ldap3.core.exceptions import LDAPBindError, LDAPConstraintViolationResult, \
+    LDAPInvalidCredentialsResult, LDAPUserNameIsMandatoryError
 import os
 from os import path
 
@@ -50,7 +51,7 @@ def index_tpl(**kwargs):
 
 
 def connect_ldap(**kwargs):
-    server = Server(CONF['ldap']['host'],
+    server = Server(host=CONF['ldap']['host'],
                     port=CONF['ldap'].getint('port', None),
                     use_ssl=CONF['ldap'].getboolean('use_ssl', False),
                     connect_timeout=5)
@@ -79,7 +80,7 @@ def change_password_ldap(username, old_pass, new_pass):
         user_dn = find_user_dn(c, username)
 
     # Note: raises LDAPUserNameIsMandatoryError when user_dn is None.
-    with connect_ldap(authentication=AUTH_SIMPLE, user=user_dn, password=old_pass) as c:
+    with connect_ldap(authentication=SIMPLE, user=user_dn, password=old_pass) as c:
         c.bind()
         c.extend.standard.modify_password(user_dn, old_pass, new_pass)
 
@@ -87,7 +88,7 @@ def change_password_ldap(username, old_pass, new_pass):
 def change_password_ad(username, old_pass, new_pass):
     user = username + '@' + CONF['ldap']['ad_domain']
 
-    with connect_ldap(authentication=AUTH_SIMPLE, user=user, password=old_pass) as c:
+    with connect_ldap(authentication=SIMPLE, user=user, password=old_pass) as c:
         c.bind()
         user_dn = find_user_dn(c, username)
         c.extend.microsoft.modify_password(user_dn, new_pass, old_pass)
@@ -95,7 +96,7 @@ def change_password_ad(username, old_pass, new_pass):
 
 def find_user_dn(conn, uid):
     search_filter = CONF['ldap']['search_filter'].replace('{uid}', uid)
-    conn.search(CONF['ldap']['base'], "(%s)" % search_filter, SUBTREE, attributes=['dn'])
+    conn.search(CONF['ldap']['base'], "(%s)" % search_filter, SUBTREE)
 
     return conn.response[0]['dn'] if conn.response else None
 
