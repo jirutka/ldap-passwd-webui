@@ -16,6 +16,7 @@ from os import path
 BASE_DIR = path.dirname(__file__)
 LOG = logging.getLogger(__name__)
 LOG_FORMAT = '%(asctime)s %(levelname)s: %(message)s'
+VERSION = '1.0.0'
 
 
 @get('/')
@@ -121,6 +122,7 @@ class Error(Exception):
 # Set up logging.
 logging.basicConfig(format=LOG_FORMAT)
 LOG.setLevel(logging.INFO)
+LOG.info("Starting ldap-passwd-webui %s" % VERSION)
 
 CONF = read_config()
 
