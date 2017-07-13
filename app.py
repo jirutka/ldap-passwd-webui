@@ -12,6 +12,8 @@ import logging
 import os
 from os import path
 
+
+BASE_DIR = path.dirname(__file__)
 LOG = logging.getLogger(__name__)
 LOG_FORMAT = '%(asctime)s %(levelname)s: %(message)s'
 
@@ -120,7 +122,6 @@ class Error(Exception):
 logging.basicConfig(format=LOG_FORMAT)
 LOG.setLevel(logging.INFO)
 
-BASE_DIR = path.dirname(__file__)
 CONF = read_config()
 
 bottle.TEMPLATE_PATH = [ BASE_DIR ]
