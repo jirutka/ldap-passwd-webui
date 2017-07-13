@@ -41,7 +41,7 @@ If you have Active Directory (or Samba 4 AD), then you *must* use encrypted conn
 There are multiple ways how to run it:
 
 * with the built-in default WSGI server based on https://docs.python.org/3/library/wsgiref.html#module-wsgiref.simple_server[wsgiref],
-* under a {wikip-url}/Web_Server_Gateway_Interface[WSGI] server like https://uwsgi-docs.readthedocs.org[uWSGI], http://gunicorn.org[Gunicorn], {pypi-url}/mod_wsgi[mod_wsgi], … (recommended)
+* under a {wikip-url}/Web_Server_Gateway_Interface[WSGI] server like https://uwsgi-docs.readthedocs.org[uWSGI], https://docs.pylonsproject.org/projects/waitress[Waitress], http://gunicorn.org[Gunicorn], … (recommended)
 * as a {wikip-url}/Common_Gateway_Interface[CGI] script.
 
 === Run with the built-in server
