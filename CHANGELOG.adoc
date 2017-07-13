@@ -9,6 +9,7 @@
 
 * Update for ldap3 2.x.
 * Rename project to ldap-passwd-webui.
+* Use `logging` module for logging instead of `print()`.
 
 
 == link:{tags}/v1.0.0[1.0.0] (2017-06-06)

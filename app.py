@@ -8,8 +8,12 @@ from ldap3 import Connection, Server
 from ldap3 import SIMPLE, SUBTREE
 from ldap3.core.exceptions import LDAPBindError, LDAPConstraintViolationResult, \
     LDAPInvalidCredentialsResult, LDAPUserNameIsMandatoryError
+import logging
 import os
 from os import path
+
+LOG = logging.getLogger(__name__)
+LOG_FORMAT = '%(asctime)s %(levelname)s: %(message)s'
 
 
 @get('/')
@@ -33,10 +37,10 @@ def post_index():
     try:
         change_password(form('username'), form('old-password'), form('new-password'))
     except Error as e:
-        print("Unsuccessful attemp to change password for %s: %s" % (form('username'), e))
+        LOG.warning("Unsuccessful attemp to change password for %s: %s" % (form('username'), e))
         return error(str(e))
 
-    print("Password successfully changed for: %s" % form('username'))
+    LOG.info("Password successfully changed for: %s" % form('username'))
 
     return index_tpl(alerts=[('success', "Password has been changed")])
 
@@ -111,6 +115,10 @@ def read_config():
 class Error(Exception):
     pass
 
+
+# Set up logging.
+logging.basicConfig(format=LOG_FORMAT)
+LOG.setLevel(logging.INFO)
 
 BASE_DIR = path.dirname(__file__)
 CONF = read_config()
