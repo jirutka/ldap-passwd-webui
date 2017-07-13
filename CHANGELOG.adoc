@@ -1,5 +1,5 @@
 = Changelog
-:repo-uri: https://github.com/jirutka/change-password
+:repo-uri: https://github.com/jirutka/ldap-passwd-webui
 :issues: {repo-uri}/issues
 :pulls: {repo-uri}/pull
 :tags: {repo-uri}/releases/tag
@@ -8,6 +8,7 @@
 == Unreleased
 
 * Update for ldap3 2.x.
+* Rename project to ldap-passwd-webui.
 
 
 == link:{tags}/v1.0.0[1.0.0] (2017-06-06)

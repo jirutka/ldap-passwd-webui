@@ -1,7 +1,7 @@
-= Password change
+= Web UI for changing LDAP password
 Jakub Jirutka <https://github.com/jirutka[@jirutka]>
 //custom
-:proj-name: change-password
+:proj-name: ldap-passwd-webui
 :gh-name: jirutka/{proj-name}
 :wikip-url: https://en.wikipedia.org/wiki
 :pypi-url: https://pypi.python.org/pypi
