@@ -10,6 +10,7 @@
 * Update for ldap3 2.x.
 * Rename project to ldap-passwd-webui.
 * Use `logging` module for logging instead of `print()`.
+* Allow to enable bottle debug mode by setting environment variable `DEBUG`.
 
 
 == link:{tags}/v1.0.0[1.0.0] (2017-06-06)

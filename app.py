@@ -10,7 +10,7 @@ from ldap3.core.exceptions import LDAPBindError, LDAPConstraintViolationResult, 
     LDAPInvalidCredentialsResult, LDAPUserNameIsMandatoryError
 import logging
 import os
-from os import path
+from os import environ, path
 
 
 BASE_DIR = path.dirname(__file__)
@@ -118,6 +118,9 @@ def read_config():
 class Error(Exception):
     pass
 
+
+if environ.get('DEBUG'):
+    bottle.debug(True)
 
 # Set up logging.
 logging.basicConfig(format=LOG_FORMAT)
