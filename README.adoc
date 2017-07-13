@@ -54,6 +54,15 @@ python3 app.py
 Then you can access the app on http://localhost:8080.
 The port and host may be changed in link:settings.ini.example[settings.ini].
 
+
+=== Run with Waitress
+
+[source, sh, subs="+attributes"]
+----
+cd {proj-name}
+waitress-serve --listen=*:8080 app:application
+----
+
 === Run with uWSGI and nginx
 
 If you have many micro-apps like this, it’s IMO kinda overkill to run each in a separate uWSGI process, isn’t it?
