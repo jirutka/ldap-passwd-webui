@@ -7,7 +7,7 @@ from configparser import ConfigParser
 from ldap3 import Connection, Server
 from ldap3 import SIMPLE, SUBTREE
 from ldap3.core.exceptions import LDAPBindError, LDAPConstraintViolationResult, \
-    LDAPInvalidCredentialsResult, LDAPUserNameIsMandatoryError
+    LDAPInvalidCredentialsResult, LDAPUserNameIsMandatoryError, LDAPSocketOpenError
 import logging
 import os
 from os import environ, path
@@ -80,6 +80,10 @@ def change_password(*args):
         # Extract useful part of the error message (for Samba 4 / AD).
         msg = e.message.split('check_password_restrictions: ')[-1].capitalize()
         raise Error(msg)
+
+    except LDAPSocketOpenError as e:
+        LOG.error('{}: {!s}'.format(e.__class__.__name__, e))
+        raise Error('Unable to connect to the remote server.')
 
 
 def change_password_ldap(username, old_pass, new_pass):
