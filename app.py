@@ -7,7 +7,8 @@ from configparser import ConfigParser
 from ldap3 import Connection, Server
 from ldap3 import SIMPLE, SUBTREE
 from ldap3.core.exceptions import LDAPBindError, LDAPConstraintViolationResult, \
-    LDAPInvalidCredentialsResult, LDAPUserNameIsMandatoryError, LDAPSocketOpenError
+    LDAPInvalidCredentialsResult, LDAPUserNameIsMandatoryError, \
+    LDAPSocketOpenError, LDAPExceptionError
 import logging
 import os
 from os import environ, path
@@ -84,6 +85,10 @@ def change_password(*args):
     except LDAPSocketOpenError as e:
         LOG.error('{}: {!s}'.format(e.__class__.__name__, e))
         raise Error('Unable to connect to the remote server.')
+
+    except LDAPExceptionError as e:
+        LOG.error('{}: {!s}'.format(e.__class__.__name__, e))
+        raise Error('Encountered an unexpected error while communicating with the remote server.')
 
 
 def change_password_ldap(username, old_pass, new_pass):
