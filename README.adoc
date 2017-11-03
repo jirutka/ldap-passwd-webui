@@ -12,6 +12,24 @@ It’s built with http://bottlepy.org[Bottle], a WSGI micro web-framework for Py
 
 == Installation
 
+=== Alpine Linux
+
+. Install package *ldap-passwd-webui-waitress* from the Alpine’s community repository:
++
+[source, sh]
+apk add ldap-passwd-webui-waitress
++
+IMPORTANT: This package is in Alpine stable since v3.7. You can also install it from _edge_ (unstable) branch.
+
+. Adjust configuration in `/etc/ldap-passwd-webui.ini` and `/etc/conf.d/`.
+
+. Start service ldap-passwd-webui:
++
+[source]
+/etc/init.d/ldap-passwd-webui start
+
+=== Manually
+
 Clone this repository and install dependencies:
 
 [source, sh, subs="+attributes"]
@@ -20,6 +38,8 @@ git clone git@github.com:{gh-name}.git
 cd {proj-name}
 pip install -r requirements.txt
 ----
+
+Read the next sections to learn how to run it.
 
 === Requirements
 
