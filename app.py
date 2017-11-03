@@ -41,7 +41,7 @@ def post_index():
     try:
         change_password(form('username'), form('old-password'), form('new-password'))
     except Error as e:
-        LOG.warning("Unsuccessful attemp to change password for %s: %s" % (form('username'), e))
+        LOG.warning("Unsuccessful attempt to change password for %s: %s" % (form('username'), e))
         return error(str(e))
 
     LOG.info("Password successfully changed for: %s" % form('username'))
