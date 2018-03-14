@@ -24,11 +24,11 @@
 
         <label for="new-password">New password</label>
         <input id="new-password" name="new-password" type="password"
-            pattern=".{8,}" x-moz-errormessage="Password must be at least 8 characters long." required>
+            pattern=".{8,}" oninvalid="SetCustomValidity('Password must be at least 8 characters long.')" required>
 
         <label for="confirm-password">Confirm new password</label>
         <input id="confirm-password" name="confirm-password" type="password"
-            pattern=".{8,}" x-moz-errormessage="Password must be at least 8 characters long." required>
+            pattern=".{8,}" oninvalid="SetCustomValidity('Password must be at least 8 characters long.')" required>
 
         <button type="submit">Update password</button>
       </form>
