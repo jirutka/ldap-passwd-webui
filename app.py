@@ -17,7 +17,7 @@ from os import environ, path
 BASE_DIR = path.dirname(__file__)
 LOG = logging.getLogger(__name__)
 LOG_FORMAT = '%(asctime)s %(levelname)s: %(message)s'
-VERSION = '2.0.0'
+VERSION = '2.1.0'
 
 
 @get('/')
