@@ -1,7 +1,7 @@
 [html]
 page_title = Change your password on example.org
 
-[ldap]
+[ldap:0]
 host = localhost
 port = 636
 use_ssl = true
@@ -12,6 +12,13 @@ search_filter = uid={uid}
 #type = ad
 #ad_domain = ad.example.org
 #search_filter = sAMAccountName={uid}
+
+# You may specify multiple LDAPs, the password will be changed in all.
+# If one fails, the previous password changes are reverted.
+#[ldap:1]
+#host = localhost
+#base = ou=People,dc=example,dc=org
+#search_filter = uid={uid}
 
 [server]
 server = auto

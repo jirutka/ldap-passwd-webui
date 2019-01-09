@@ -5,6 +5,11 @@
 :tags: {repo-uri}/releases/tag
 
 
+== unreleased
+
+* Add support for changing password in multiple LDAPs at once.
+
+
 == link:{tags}/v2.0.0[2.0.0] (2017-07-14)
 
 * Update for ldap3 2.x.
